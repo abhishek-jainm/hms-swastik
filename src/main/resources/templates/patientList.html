@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Hospital Management System</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <style>
+        body, html {
+            padding: 0;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+        .container-fluid {
+            padding: 0;
+        }
+        .table-container {
+            width: 100%;
+            margin: 0;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+        .table th, .table td {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            max-width: 150px;
+        }
+        .table th:nth-child(2), .table td:nth-child(2) {
+            max-width: 200px; /* Adjust this width for the name column */
+        }
+        .table th:last-child, .table td:last-child {
+            white-space: normal;
+            max-width: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid my-2">
+    <h1>Patient List</h1>
+
+    <!-- Search Form -->
+    <form id="searchForm" class="form-inline mb-3">
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="searchId" class="sr-only">Patient ID</label>
+            <input type="text" class="form-control" id="searchId" placeholder="Search by ID">
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="searchName" class="sr-only">Name</label>
+            <input type="text" class="form-control" id="searchName" placeholder="Search by Name">
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="searchMobile" class="sr-only">Mobile Number</label>
+            <input type="text" class="form-control" id="searchMobile" placeholder="Search by Mobile Number">
+        </div>
+        <button type="button" class="btn btn-primary mb-2" onclick="searchPatients()">Search</button>
+        <button type="button" class="btn btn-secondary mb-2 ml-2" onclick="clearSearch()">Clear</button>
+    </form>
+
+    <a th:href="@{/showRegistrationForm}" class="btn btn-primary btn-sm mb-3"><b>Add Patient</b></a>
+    &nbsp;&nbsp;&nbsp;&nbsp;<a th:href="@{/}" class="btn btn-primary btn-sm mb-3"><b>Back To Home</b></a>
+
+    <div class="table-container">
+        <table border="1" class="table table-striped table-responsive-md">
+            <thead>
+            <tr>
+                <th>Patient Id</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Consultation</th>
+                <th>Mobile Number</th>
+                <th>Address</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="patient : ${listPatient}">
+                <td th:text="${patient.id}"></td>
+                <td th:text="${patient.name}"></td>
+                <td th:text="${patient.age}"></td>
+                <td th:text="${patient.gender}"></td>
+                <td th:text="${patient.consultation}"></td>
+                <td th:text="${patient.mobileNo}"></td>
+                <td th:text="${patient.address}"></td>
+                <td>
+                    <a th:href="@{/print-prescription/{id}(id=${patient.id})}" class="btn btn-primary">Follow-Up</a>
+                    <a th:href="@{/generateBill/{id}(id=${patient.id})}" class="btn btn-danger">Generate Bill</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${totalPages > 1}">
+        <div class="row col-sm-10">
+            <div class="col-sm-2">
+                Total Rows: [[${totalItems}]]
+            </div>
+            <div class="col-sm-1">
+                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                    <a th:if="${currentPage != i}" th:href="@{'/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+                    <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
+                </span>
+            </div>
+            <div class="col-sm-1">
+                <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
+                <span th:unless="${currentPage < totalPages}">Next</span>
+            </div>
+            <div class="col-sm-1">
+                <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
+                <span th:unless="${currentPage < totalPages}">Last</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function searchPatients() {
+        const searchId = document.getElementById('searchId').value.toLowerCase();
+        const searchName = document.getElementById('searchName').value.toLowerCase();
+        const searchMobile = document.getElementById('searchMobile').value.toLowerCase();
+        const rows = document.querySelectorAll('tbody tr');
+
+        rows.forEach(row => {
+            const idCell = row.children[0].innerText.toLowerCase();
+            const nameCell = row.children[1].innerText.toLowerCase();
+            const mobileCell = row.children[5].innerText.toLowerCase();
+            const idMatch = idCell.includes(searchId);
+            const nameMatch = nameCell.includes(searchName);
+            const mobileMatch = mobileCell.includes(searchMobile);
+
+            if (idMatch && nameMatch && mobileMatch) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    function clearSearch() {
+        document.getElementById('searchId').value = '';
+        document.getElementById('searchName').value = '';
+        document.getElementById('searchMobile').value = '';
+        // Reload the page to reset the table and search fields
+        window.location.reload();
+    }
+</script>
+
+</body>
+</html>

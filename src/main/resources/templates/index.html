@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management System</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+
+        .background {
+            background-image: url('hospital1.jpeg'); /* Replace with your image */
+            background-size: cover;
+            background-position: center;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: rgb(12, 63, 100);
+            flex-direction: column;
+            position: relative;
+        }
+
+        .header-container {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .header-container h1 {
+            font-size: 50px;
+            margin: 0;
+            padding: 10px;
+        }
+
+        .header-container p {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .button {
+            padding: 15px 30px;
+            font-size: 18px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .bill-form-container {
+            display: none;
+            position: fixed; /* Changed to fixed */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+            z-index: 1000; /* Ensure it appears above other content */
+        }
+
+        .bill-form-container .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .bill-form-container .close-button:hover {
+            color: #000;
+        }
+
+        .bill-form-container input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .bill-form-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .bill-form-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="background">
+    <div class="header-container">
+        <h1>Welcome to Swastik Health Care</h1>
+        <p>"Swastik Hospital - a place of healing, hope, and humanity."</p>
+    </div>
+    <div class="button-container">
+        <a href="showRegistrationForm" class="button">Register Patient</a>
+        <a href="patientList" class="button">Patient List</a>
+        <a href="billList" class="button">Patient Bills</a>
+        <a href="report" class="button">Report</a>
+    </div>
+    <div class="bill-form-container" id="billFormContainer">
+        <span class="close-button" onclick="hideBillForm()">✖</span>
+        <h2>Enter Patient ID</h2>
+        <input type="text" id="patientIdInput" placeholder="Patient ID">
+        <button onclick="submitPatientId()">Submit</button>
+    </div>
+</div>
+
+<script>
+    function showBillForm() {
+        document.getElementById('billFormContainer').style.display = 'block';
+    }
+
+    function hideBillForm() {
+        document.getElementById('billFormContainer').style.display = 'none';
+    }
+
+    function submitPatientId() {
+        const patientId = document.getElementById('patientIdInput').value;
+        if (patientId) {
+            // Redirect or handle the patient ID submission
+            window.location.href = `generateBill/${encodeURIComponent(patientId)}`;
+        } else {
+            alert('Please enter a Patient ID.');
+        }
+    }
+</script>
+</body>
+</html>

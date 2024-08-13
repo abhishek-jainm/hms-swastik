@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Prescription</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 80%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .header .token {
+            font-size: 14px;
+            color: #555;
+            font-weight: bold;
+        }
+        .header .date {
+            font-size: 14px;
+            color: #555;
+            font-weight: bold;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .info-table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+            table-layout: auto; /* Ensure column width adjusts based on content */
+        }
+        .info-table th, .info-table td {
+            padding: 5px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        .info-table th {
+            background-color: #f2f2f2;
+            white-space: nowrap; /* Prevent header text from wrapping */
+            width: 1%; /* Minimal width necessary to fit the content */
+        }
+        .info-table td {
+            white-space: nowrap; /* Prevent data text from wrapping */
+            width: auto; /* Allow data cells to take up the remaining space */
+        }
+        .print-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+            text-align: center;
+            text-decoration: none;
+        }
+        .print-btn:hover {
+            background-color: #45a049;
+        }
+        @media print {
+            .container {
+                max-width: 100%;
+            }
+            .print-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <br/><br/><br/><br/><br/>
+    <div class="header">
+        <div class="token">No.: </div>
+        <div class="date">Date: <span th:text="${formattedDate}"></span></div>
+    </div>
+    <table class="info-table">
+        <tr>
+            <th>Patient Name:</th>
+            <td th:text="${patient.name}"></td>
+            <th>Age:</th>
+            <td th:text="${patient.age}"></td>
+            <th>Gender:</th>
+            <td th:text="${patient.gender}"></td>
+        </tr>
+        <tr>
+            <th>Address:</th>
+            <td th:text="${patient.address}"></td>
+            <th>Patient ID:</th>
+            <td colspan="3" th:text="${patient.id}"></td>
+        </tr>
+    </table>
+    <a href="javascript:window.print()" class="print-btn">Print</a>
+    <a th:href="@{/patientList}" class="print-btn">Patient List</a>
+</div>
+
+</body>
+</html>
