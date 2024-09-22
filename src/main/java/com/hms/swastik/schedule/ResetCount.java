@@ -34,11 +34,9 @@ public class ResetCount {
         Optional<ScheduleLock> lockOptional = scheduleLockRepository.findById(LOCK_ID);
 
         if (lockOptional.isPresent() && !lockOptional.get().getLastRunDate().isBefore(today)) {
-            // The task has already run today
             return;
         }
 
-        // Reset the daily count
         DailyCount dailyCount = dailyCountRepository.findByCountDate(today)
                 .orElseGet(() -> {
                     DailyCount newCount = new DailyCount();
@@ -48,7 +46,6 @@ public class ResetCount {
         dailyCount.setCount(0);
         dailyCountRepository.save(dailyCount);
 
-        // Update the lock
         ScheduleLock lock = lockOptional.orElseGet(() -> {
             ScheduleLock newLock = new ScheduleLock();
             newLock.setId(LOCK_ID);

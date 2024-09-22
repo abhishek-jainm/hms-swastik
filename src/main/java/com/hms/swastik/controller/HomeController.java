@@ -56,7 +56,6 @@ public class HomeController {
 
     @GetMapping("/showRegistrationForm")
     public String showNewEmployeeForm(Model model) {
-        // create model attribute to bind form data
         Patient patient = new Patient();
         model.addAttribute("patient", patient);
         return "register";
@@ -64,7 +63,6 @@ public class HomeController {
 
     @GetMapping("/report")
     public String showReportForm(Model model) {
-        // create model attribute to bind form data
         LocalDate toDate=LocalDate.now();
         LocalDate endDate=LocalDate.now();
         model.addAttribute("toDate", toDate);

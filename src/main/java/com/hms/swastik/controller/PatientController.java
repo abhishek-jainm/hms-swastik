@@ -42,7 +42,6 @@ public class PatientController {
         String formattedDate = patient.getCreatedAt().format(formatter);
         int sequenceNumber = dailyCountService.getNextCount();
 
-        // Add formatted and parsed dates to the model
         model.addAttribute("formattedDate", formattedDate);
         model.addAttribute("patient", patient);
         model.addAttribute("sequenceNumber", sequenceNumber);
@@ -62,15 +61,12 @@ public class PatientController {
             @RequestParam String startDate,
             @RequestParam String endDate) {
 
-        // Parse the dates from string to LocalDate
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
         LocalDate start = LocalDate.parse(startDate, formatter);
         LocalDate end = LocalDate.parse(endDate, formatter);
 
-        // Generate the report
         ByteArrayInputStream in = patientService.generateReport( start, end);
 
-        // Create response headers
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "attachment; filename=patient_report.xlsx");
 
